@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import Editor from '../editor/editor';
 import Footer from '../footer/footer';
@@ -43,6 +44,25 @@ const Maker = ({ authService }) => {
     },
   ]);
 
+  const handleAdd = (name, company, theme, title, email, message) => {
+    const addCards = [
+      ...cards,
+      {
+        id: Date.now(),
+        name,
+        company,
+        theme,
+        title,
+        email,
+        message,
+        fileName: '',
+        fileURL: null,
+      },
+    ];
+
+    setCards(addCards);
+  };
+
   const history = useHistory();
 
   const onLogout = () => {
@@ -61,7 +81,7 @@ const Maker = ({ authService }) => {
     <section className={styles.maker}>
       <Header onLogout={onLogout} />
       <div className={styles.container}>
-        <Editor cards={cards} />
+        <Editor onAdd={handleAdd} cards={cards} />
         <Preview cards={cards} />
       </div>
       <Footer />
