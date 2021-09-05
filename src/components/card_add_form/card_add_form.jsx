@@ -1,76 +1,81 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Button from '../button/button';
 import ImageFileInput from '../image_file_input/image_file_input';
 import styles from './card_add_form.module.css';
-const CardAddForm = (props) => {
-  const formRef = React.createRef();
-  const inputName = React.createRef();
-  const inputCompany = React.createRef();
-  const selectTheme = React.createRef();
-  const inputTitle = React.createRef();
-  const inputEmail = React.createRef();
-  const textareaMessage = React.createRef();
+
+const CardAddForm = ({ addCard }) => {
+  const formRef = useRef();
+  const nameRef = useRef();
+  const companyRef = useRef();
+  const themeRef = useRef();
+  const titleRef = useRef();
+  const emailRef = useRef();
+  const messageRef = useRef();
 
   const onSubmit = (event) => {
     event.preventDefault();
-    const name = inputName.current.value;
-    const company = inputCompany.current.value;
-    const theme = selectTheme.current.value;
-    const title = inputTitle.current.value;
-    const email = inputEmail.current.value;
-    const message = textareaMessage.current.value;
 
-    name && props.onAdd(name, company, theme, title, email, message);
+    const card = {
+      id: Date.now(),
+      name: nameRef.current.value || '',
+      company: companyRef.current.value || '',
+      theme: themeRef.current.value,
+      title: titleRef.current.value || '',
+      email: emailRef.current.value || '',
+      message: messageRef.current.value || '',
+      fileName: '',
+      fileURL: '',
+    };
+    addCard(card);
 
     formRef.current.reset();
-    console.log(`name=${name}, company=${company}, theme=${theme}`);
   };
 
   return (
     <form ref={formRef} className={styles.form}>
       <input
+        ref={nameRef}
         className={styles.input}
         type="text"
         name="name"
-        ref={inputName}
-        placeholder="name"
+        placeholder="Name"
       />
       <input
+        ref={companyRef}
         className={styles.input}
         type="text"
         name="company"
-        ref={inputCompany}
-        placeholder="company"
+        placeholder="Company"
       />
       <select
-        ref={selectTheme}
+        ref={themeRef}
         className={styles.select}
         name="theme"
-        placeholder="theme"
+        placeholder="Theme"
       >
-        <option value="light">Light</option>
+        <option value="light">light</option>
         <option value="dark">dark</option>
-        <option value="colorful">Colorful</option>
+        <option value="colorful">colorful</option>
       </select>
       <input
-        ref={inputTitle}
+        ref={titleRef}
         className={styles.input}
         type="text"
         name="title"
-        placeholder="title"
+        placeholder="Title"
       />
       <input
-        ref={inputEmail}
+        ref={emailRef}
         className={styles.input}
         type="text"
         name="email"
-        placeholder="email"
+        placeholder="Email"
       />
       <textarea
-        ref={textareaMessage}
+        ref={messageRef}
         className={styles.textarea}
         name="message"
-        placeholder="message"
+        placeholder="Message"
       ></textarea>
       <div className={styles.fileInput}>
         <ImageFileInput />
