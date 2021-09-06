@@ -1,32 +1,40 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styles from './image_file_input.module.css';
 
-const ImageFileInput = ({ card, imageUpload, onImageUpload }) => {
-  let id = '0';
-  console.log(`card1=${card}`);
-  if (card !== undefined) {
-    console.log(`card2=${card}`);
-    id = card.id;
-  }
-  const fileInput = id + 'file';
-
-  const onFileUpload = (event) => {
+const ImageFileInput = ({ imageUploader, name, onFileChange }) => {
+  const inputRef = useRef();
+  const onButtonClick = (event) => {
     event.preventDefault();
+    inputRef.current.click();
+  };
 
-    imageUpload
-      .upload(fileInput) //
-      .then((data) => {
-        const upload = { ...card, fileName: data.public_id, fileURL: data.url };
-        console.log(`upload:${upload}`);
-        onImageUpload(upload);
-      });
+  const onChange = async (event) => {
+    //  event.preventDefault();
+    console.log(event.target.files[0]);
+    const uploaded = await imageUploader.upload(event.target.files[0]);
+
+    console.log(uploaded);
+
+    onFileChange({
+      name: uploaded.original_filename,
+      url: uploaded.url,
+    });
   };
 
   return (
-    <>
-      <input type="file" name={fileInput} id={fileInput} />
-      <button onClick={onFileUpload}>Image</button>;
-    </>
+    <div className={styles.container}>
+      <input
+        ref={inputRef}
+        className={styles.input}
+        type="file"
+        accept="image/*"
+        name="file"
+        onChange={onChange}
+      />
+      <button className={styles.button} onClick={onButtonClick}>
+        {name || 'No file'}{' '}
+      </button>
+    </div>
   );
 };
 export default ImageFileInput;

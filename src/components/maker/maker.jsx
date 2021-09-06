@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { isCompositeComponentWithType } from 'react-dom/test-utils';
 import { useHistory } from 'react-router-dom';
 import Editor from '../editor/editor';
 import Footer from '../footer/footer';
@@ -7,7 +6,7 @@ import Header from '../header/header';
 import Preview from '../preview/preview';
 import styles from './maker.module.css';
 
-const Maker = ({ authService, imageUpload }) => {
+const Maker = ({ FileInput, authService }) => {
   const [cards, setCards] = useState({
     1: {
       id: '1',
@@ -85,11 +84,10 @@ const Maker = ({ authService, imageUpload }) => {
       <Header onLogout={onLogout} />
       <div className={styles.container}>
         <Editor
-          imageUpload={imageUpload}
+          FileInput={FileInput}
           addCard={createOrUpdateCard}
           updateCard={createOrUpdateCard}
           deleteCard={deleteCard}
-          onImageUpload={createOrUpdateCard}
           cards={cards}
         />
         <Preview cards={cards} />
